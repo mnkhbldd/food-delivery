@@ -4,7 +4,7 @@ import { LoginSectionLogin } from "@/components/LoginSection";
 
 function LoginPage() {
   return (
-    <div className="w-screen h-screen">
+    <div>
       <LoginSectionLogin />
     </div>
   );

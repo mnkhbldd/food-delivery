@@ -1,11 +1,15 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 // // import { motion } from "motion/react";
 import { LoginSectionEmail, LoginSectionPassword } from "./LoginSection";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export const Signup = () => {
   const [stepCount, setStepCount] = useState(0);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const router = useRouter();
 
   const handleNextStep = () => {
     if (stepCount < 2) {
@@ -14,22 +18,28 @@ export const Signup = () => {
   };
 
   const handlePreviousStep = () => {
-    if (stepCount > 1) {
+    if (stepCount >= 1) {
       return setStepCount(stepCount - 1);
     }
   };
 
+  const handleAlreadyHaveAccount = () => {
+    router.push("/login");
+  };
+
   const signUpStep = [
     <LoginSectionEmail
+      inputRef={inputRef}
       onClick={handleNextStep}
       handlePreviousStep={handlePreviousStep}
+      handleAlreadyHaveAccount={handleAlreadyHaveAccount}
     />,
-    <LoginSectionPassword />,
+    <LoginSectionPassword
+      inputRef={inputRef}
+      handlePreviousStep={handlePreviousStep}
+      handleAlreadyHaveAccount={handleAlreadyHaveAccount}
+    />,
   ][stepCount];
 
-  return (
-    <div className="flex w-screen h-screen items-center justify-center">
-      {signUpStep}
-    </div>
-  );
+  return <div className="flex ">{signUpStep}</div>;
 };
