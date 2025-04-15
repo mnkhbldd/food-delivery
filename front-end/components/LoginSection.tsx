@@ -11,7 +11,13 @@ type InputTypes = {
   handleInputChange: any;
 };
 
-export const LoginSectionEmail = () => {
+export const LoginSectionEmail = ({
+  onClick,
+  handlePreviousStep,
+}: {
+  onClick: () => void;
+  handlePreviousStep: () => void;
+}) => {
   return (
     <div className="flex items-center justify-around w-full h-full">
       <div className="flex flex-col gap-6 w-[288px]">
@@ -26,7 +32,9 @@ export const LoginSectionEmail = () => {
         </div>
 
         <Input name="gmail" placeholder="Enter your email address" />
-        <Button className="bg-gray-400">Let's Go</Button>
+        <Button onClick={onClick} className="bg-gray-400">
+          Let's Go
+        </Button>
         <p className="text-center text-[#71717A]">
           Already have an account?{" "}
           <span className="text-[#2563EB]">Log in</span>
