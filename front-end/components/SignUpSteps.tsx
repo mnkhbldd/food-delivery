@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 // // import { motion } from "motion/react";
 import { LoginSectionEmail, LoginSectionPassword } from "./LoginSection";
 import { useRef, useState } from "react";
+import axios from "axios";
 
 export const Signup = () => {
   const [stepCount, setStepCount] = useState(0);
