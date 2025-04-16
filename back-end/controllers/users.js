@@ -1,59 +1,117 @@
 import { v4 as uuidv4 } from "uuid";
+import UserModel from "../model/user.js";
 
-const users = [];
-
-export const getUsers = (req, res) => {
-  res.send(users);
-};
-
-export const userUpdate = (req, res) => {
-  const { email } = req.body;
-  users.map((user) => {
-    if (user.email === email) {
-      user.password = password;
-      user.confirmpassword = confirmpassword;
-    }
-  });
-
-  res.send({
-    success: true,
-    message: "user info is updated",
-  });
-};
-
-export const createUser = (req, res) => {
-  const { email, password, confirmpassword } = req.body;
-
-  const duplicated = users.find((user) => user.email == email);
-
-  if (duplicated) {
+export const createUser = async (req, res) => {
+  const { email, password, phoneNumber, address, isVerified } = req.body;
+  try {
+    const user = await UserModel.create({
+      email: email,
+      password: password,
+      phoneNumber: phoneNumber,
+      address: address,
+      isVerified: isVerified,
+    });
     return res
-      .status(409)
-      .json({
+      .status(200)
+      .send({
+        success: true,
+        user: user,
+      })
+      .end();
+  } catch (error) {
+    console.error(error, err);
+    return res
+      .status(400)
+      .send({
         success: false,
-        message: "User already exists",
+        message: error,
       })
       .end();
   }
-  users.puish({ email, password, confirmpassword, id: uuidv4() });
-  res.send({ success: true, message: "User created successfully" });
 };
 
-//admin apis
-
-export const deleteUser = (req, res) => {
-  const { id } = req.body;
-  users = users.filter((user) => user.id !== id);
-  res.send({
-    success: true,
-    message: "User is deleted",
-  });
+export const getUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find();
+    return res
+      .status(200)
+      .send({
+        success: true,
+        users: users,
+      })
+      .end();
+  } catch (error) {
+    console.error(error, err);
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error,
+      })
+      .end();
+  }
 };
 
-export const getUserById = (req, res) => {
-  const { id } = req.params;
-  const user = users.find((user) => {
-    return user.id === id;
-  });
-  res.send(user);
+export const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await UserModel.findById(id);
+    return res
+      .status(200)
+      .send({
+        success: true,
+        user: user,
+      })
+      .end();
+  } catch (error) {
+    console.error(error, err);
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error,
+      })
+      .end();
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await UserModel.findByIdAndDelete(id);
+    return res
+      .status(200)
+      .send({
+        success: true,
+        user: user,
+      })
+      .end();
+  } catch (error) {
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error,
+      })
+      .end();
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await UserModel.findByIdAndUpdate(id, req.body);
+    return res.status(200).send({
+      success: true,
+      user: user,
+    });
+  } catch (error) {
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error,
+      })
+      .end();
+  }
 };

@@ -4,14 +4,14 @@ import {
   deleteUser,
   getUserById,
   getUsers,
-  userUpdate,
+  updateUser,
 } from "../controllers/users.js";
 
 export const usersRouter = expresse.Router();
 
 usersRouter
+  .post("/", createUser)
   .get("/", getUsers)
   .get("/:id", getUserById)
-  .post("/", createUser)
-  .put("/", userUpdate)
-  .delete("/", deleteUser);
+  .delete("/:id", deleteUser)
+  .put("/:id", updateUser);
