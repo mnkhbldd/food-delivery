@@ -1,21 +1,18 @@
 import { v4 as uuidv4 } from "uuid";
 import FoodModel from "../model/food.js";
+import categoryModel from "../model/category.js";
 
-export const createFood = async (req, res) => {
-  const { foodName, price, image, ingredients, category } = req.body;
+export const createCategory = async (req, res) => {
+  const { categoryName } = req.body;
   try {
-    const food = await FoodModel.create({
-      foodName: foodName,
-      price: price,
-      image: image,
-      ingredients: ingredients,
-      category: category,
+    const category = await categoryModel.create({
+      categoryName: categoryName,
     });
     return res
       .status(200)
       .send({
         success: true,
-        food: food,
+        category: category,
       })
       .end();
   } catch (error) {
@@ -30,14 +27,14 @@ export const createFood = async (req, res) => {
   }
 };
 
-export const getFoods = async (req, res) => {
+export const getCategory = async (req, res) => {
   try {
-    const foods = await FoodModel.find().populate("category");
+    const categories = await categoryModel.find();
     return res
       .status(200)
       .send({
         success: true,
-        foods: foods,
+        categories: categories,
       })
       .end();
   } catch (error) {
@@ -52,15 +49,15 @@ export const getFoods = async (req, res) => {
   }
 };
 
-export const getFoodById = async (req, res) => {
+export const getCategoryById = async (req, res) => {
   try {
     const { id } = req.params;
-    const food = await FoodModel.findById(id);
+    const category = await categoryModel.findById(id);
     return res
       .status(200)
       .send({
         success: true,
-        food: food,
+        category: category,
       })
       .end();
   } catch (error) {
@@ -75,15 +72,15 @@ export const getFoodById = async (req, res) => {
   }
 };
 
-export const deleteFood = async (req, res) => {
+export const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const food = await FoodModel.findByIdAndDelete(id);
+    const category = await categoryModel.findByIdAndDelete(id);
     return res
       .status(200)
       .send({
         success: true,
-        food: food,
+        category: category,
       })
       .end();
   } catch (error) {
@@ -97,13 +94,13 @@ export const deleteFood = async (req, res) => {
   }
 };
 
-export const updateFood = async (req, res) => {
+export const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const food = await FoodModel.findByIdAndUpdate(id, req.body);
+    const category = await categoryModel.findByIdAndUpdate(id, req.body);
     return res.status(200).send({
       success: true,
-      food: food,
+      category: category,
     });
   } catch (error) {
     return res

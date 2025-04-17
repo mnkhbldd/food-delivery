@@ -31,29 +31,14 @@ export default function Home() {
     <div className="w-full h-screen ">
       <MainPageHeader />
       {/* ///////////////// */}
-
-      <div className="bg-gray-200 w-full h-full relative ">
-        <div className="absolute  z-0 ">
-          <div className="flex gap-5">
-            <p className="text-[130px] text-[#71717A]">SAY</p>
-            <p className="text-[130px] text-[#FD543F]">CHEESE</p>
-            <p className="text-[130px] text-[#71717A]">·</p>
-          </div>
-        </div>
-        <div>
-          <div className="bg-black w-[90%] h-[390px] absolute top-1/5 translate-y-1/5 rounded-r-full z-5"></div>
-          <div className="bg-[#FD543F] w-[97%] h-[390px] absolute -left-24 top-1/4 translate-y-1/5 rounded-full z-4"></div>
-        </div>
+      <div className="w-full h-full">
         <Image
-          className=" absolute z-7 left-1/4 -top-1/12 "
-          height={917}
-          width={917}
-          alt="main image"
-          src="https://s3-alpha-sig.figma.com/img/45c9/f811/b2ce17de6c67dc101d53db36830b072b?Expires=1745798400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=i8lJybACY2KjyJeDrSicGCGvw-iAsXMUywPLKjfuHWpzq4XJyumzlwzsfxD9nfGsmbMVMxprwSNYXrAxdN6Ropbqo9DF8NVI8APzqAOYVecNmTz1P10xnb5Aqvs8t3hqDsQoHJVkRekU~6KI3HQzLvQrNuU6UmgenWWh52smHOs5s6e-Tr3jb1SYSHVyO5jnmBdCgRVBvCRyMKzPqa86k3IDK~uuzI-LHx1zQ20Z2F0pHouK~qa-onmR9WXiEXI~WvQu4JY6cWec6iselbaA3PTLOnuIXsMc5MjzYOGfRuPRS8Q9LKCYmPEgxrmIMsoiIu0yvBIG7TK1O1ipk1JyVA__"
+          layout="fill"
           priority
+          alt="bg"
+          src="https://s3-alpha-sig.figma.com/img/8984/6312/a2a7c22f5fe9122b2bd6276cdd549c3e?Expires=1745798400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=ZT8ix8PnvS5PNCzC9Xqfe8g8T2DgO7M5SL~Xr0wI2LjCQqEDVh0ErkR4plCjukQZu4NWzuG3uAlO3IiW~xj2TXJzkTt1hAsTXfb9fM~kZzBq1ovNXX-oiElqqZiRHq2iIuq3o1xOTwmqXwtHN-rGlsh0xYvc6POiPqbmE2FFeRw0zMovo8AeroEmkEa-HRDjTUURjnZtd-cbGpkL-fnOqf1pNGbT2Hk2iepnd9Qfu~uFj7-0PiEL-bgc7yLhrRHOgNH0UFIwABTkhSqyQrPmB9nrvjtByLDhc725MYKkRofHdYQAIhYPwIwuB4oCQwHbbZ8VAw2hyJl5AXZbdjAJiA__"
         ></Image>
       </div>
-
       {/* ///////////////// */}
       <div className="flex gap-1">
         {foodData.map((value, index) => (
