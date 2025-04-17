@@ -4,7 +4,7 @@ import Image from "next/image";
 type FoodType = {
   foodName: string;
   price: number;
-  image: string | StaticImport;
+  image: string;
   ingredients: string;
 };
 
@@ -19,9 +19,10 @@ export const FoodPackage = ({
       <Image
         height={210}
         width={365}
-        className="rounded-[12px]"
-        src={image ? image : "/images/food-package.png"}
+        className="rounded-[12px] w-[365px] h-[210px] object-cover"
+        src={image}
         alt="Food package"
+        unoptimized={true}
       ></Image>
       <div className="flex w-full justify-between items-center">
         <p className="text-[#FD543F] text-[24px] font-semibold">{foodName}</p>

@@ -5,6 +5,7 @@ import {
   deleteFood,
   getFoodById,
   getFoods,
+  getFoodsByCategoryId,
   updateFood,
 } from "../controllers/foods.js";
 
@@ -13,6 +14,7 @@ export const foodsRouter = expresse.Router();
 foodsRouter
   .post("/", createFood)
   .get("/", getFoods)
+  .get("/:categoryId", getFoodsByCategoryId)
   .get("/:id", getFoodById)
   .delete("/:id", deleteFood)
   .put("/:id", updateFood);

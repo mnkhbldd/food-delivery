@@ -52,6 +52,31 @@ export const getFoods = async (req, res) => {
   }
 };
 
+export const getFoodsByCategoryId = async (req, res) => {
+  const { categoryId } = req.params;
+  try {
+    const foods = await FoodModel.find({ category: categoryId }).populate(
+      "category"
+    );
+    return res
+      .status(200)
+      .send({
+        success: true,
+        foods: foods,
+      })
+      .end();
+  } catch (error) {
+    console.error(error, err);
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error,
+      })
+      .end();
+  }
+};
+
 export const getFoodById = async (req, res) => {
   try {
     const { id } = req.params;
