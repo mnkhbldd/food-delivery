@@ -1,17 +1,20 @@
 import mongoose, { now, Schema } from "mongoose";
 
+const foodOrderItem = new mongoose.Schema({
+  food: { type: Schema.Types.ObjectId, ref: "Food" },
+  quantity: {
+    type: Number,
+    required: true,
+  },
+});
+
 const foodOrderSchema = new mongoose.Schema({
   user: { type: Schema.Types.ObjectId, ref: "User" },
   totalPrice: {
     type: Number,
     required: true,
   },
-  foodOrderItems: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Notyet",
-    },
-  ],
+  foodOrderItems: [foodOrderItem],
   status: {
     type: String,
     enum: ["Pending", "Canceled", "Delivered"],
@@ -23,6 +26,6 @@ const foodOrderSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now, required: true },
 });
 
-const FoodOrderModel = mongoose.model("FoodOrder", foodOrderSchema);
+const FoodOrdersModel = mongoose.model("FoodOrder", foodOrderSchema);
 
-export default FoodOrderModel;
+export default FoodOrdersModel;

@@ -16,22 +16,16 @@ import {
 import { Textarea } from "./ui/textarea";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
-export const MainPageHeader = () => {
-  const deliveryInputRef = useRef<HTMLTextAreaElement | null>(null);
-  const [deliveryMockAddress, setDelvieryMockAddress] = useState("");
+export const MainPageHeader = ({
+  deliveryMockAddress,
+  changeDeliveryLocation,
 
-  const changeDeliveryLocation = () => {
-    if (deliveryInputRef.current) {
-      setDelvieryMockAddress(deliveryInputRef.current.value);
-    }
-  };
-
-  //   const handleOnChange = () => {
-  //     if (deliveryInputRef.current) {
-  //       console.log(deliveryInputRef.current.value);
-  //     }
-  //   };
-
+  deliveryInputRef,
+}: {
+  deliveryMockAddress: string;
+  changeDeliveryLocation: () => void;
+  deliveryInputRef: any;
+}) => {
   return (
     <div className="bg-[#18181B] h-[68px] w-full flex items-center justify-between px-[88px] py-3 fixed z-9999 ">
       <div className="flex gap-3 items-center">
@@ -84,7 +78,6 @@ export const MainPageHeader = () => {
                 </AlertDialogCancel>
               </div>
               <Textarea
-                // onChange={handleOnChange}
                 ref={deliveryInputRef}
                 className="h-[112px]"
                 placeholder="Please provide specific address details such as building number, entrance, and apartment number"

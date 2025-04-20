@@ -33,14 +33,14 @@ export const CategoryContainer = () => {
     fetchData();
   }, []);
   return (
-    <div className="w-full flex flex-col gap-9 py-8">
+    <div className="w-full flex flex-col gap-9 pt-8">
       <p className="text-[30px] text-white font-semibold">Categories</p>
       <Carousel className="w-full ">
         <CarouselContent className="">
           {foodCategoryData.map((food, index) => (
             <CarouselItem
               key={index}
-              className="pl-4 md:basis-2/3 lg:basis-1/8"
+              className="pl-4 md:basis-2/3 lg:basis-1/9"
             >
               <Badge className="bg-white text-black rounded-full text-[18px] font-normal min-w-[151px]">
                 {food.categoryName}

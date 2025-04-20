@@ -4,10 +4,13 @@ import { FoodPackage } from "@/components/FoodPackage";
 import { MainPageHeader } from "@/components/MainPageHeader";
 import axios from "axios";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CategoryContainer } from "./components/CategoryContainer";
 
 import { AppetizersContainer } from "./components/AppetizersContainer";
+import { SaladContainer } from "./components/Salad";
+import { LunchFavoritesContainer } from "./components/LunchFavorites";
+import MainPageFooter from "@/components/MainPageFooter";
 type FoodType = {
   foodName: string;
   price: number;
@@ -15,9 +18,22 @@ type FoodType = {
   ingredients: string;
 };
 export default function Home() {
+  const deliveryInputRef = useRef<HTMLTextAreaElement | null>(null);
+  const [deliveryMockAddress, setDelvieryMockAddress] = useState("");
+
+  const changeDeliveryLocation = () => {
+    if (deliveryInputRef.current) {
+      setDelvieryMockAddress(deliveryInputRef.current.value);
+    }
+  };
+
   return (
     <div className="w-full h-screen bg-[#404040]">
-      <MainPageHeader />
+      <MainPageHeader
+        deliveryInputRef={deliveryInputRef}
+        deliveryMockAddress={deliveryMockAddress}
+        changeDeliveryLocation={changeDeliveryLocation}
+      />
       {/* ///////////////// */}
       <div className="w-full h-full">
         <Image
@@ -29,11 +45,15 @@ export default function Home() {
       </div>
       {/* ///////////////// */}
       <div className="bg-[#404040] w-full flex flex-col items-center">
-        <div className="w-[90%] ">
+        <div className="w-[90%] flex flex-col gap-[54px]">
           <CategoryContainer />
-          <AppetizersContainer />
+          <AppetizersContainer deliveryMockAddress={deliveryMockAddress} />
+          <SaladContainer deliveryMockAddress={deliveryMockAddress} />
+          <LunchFavoritesContainer deliveryMockAddress={deliveryMockAddress} />
+          <SaladContainer deliveryMockAddress={deliveryMockAddress} />
         </div>
       </div>
+      <MainPageFooter />
     </div>
   );
 }

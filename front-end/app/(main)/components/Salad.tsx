@@ -8,34 +8,33 @@ type FoodType = {
   image: string;
   ingredients: string;
 };
-export const AppetizersContainer = ({
+export const SaladContainer = ({
   deliveryMockAddress,
 }: {
   deliveryMockAddress: string;
 }) => {
-  const [appetizerData, setAppetizerData] = useState<FoodType[]>([]);
+  const [saladData, setSaladData] = useState<FoodType[]>([]);
 
-  const fetchAppetizerData = async () => {
+  const fetchSaladData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/food/6800b55bd95efcaef95fc881"
+        "http://localhost:8000/food/6800b561d95efcaef95fc883"
       );
-      setAppetizerData(response.data.foods);
-      console.log(appetizerData, "appetizerData");
+      setSaladData(response.data.foods);
     } catch (error) {
       console.error("cannot fetch data", error);
     }
   };
 
-  const slicedData = appetizerData.slice(0, 6);
+  const slicedData = saladData.slice(0, 3);
 
   useEffect(() => {
-    fetchAppetizerData();
+    fetchSaladData();
   }, []);
 
   return (
     <div className="flex flex-col gap-[54px]">
-      <p className="text-[30px] text-white font-semibold">Appetizers</p>
+      <p className="text-[30px] text-white font-semibold">Salads</p>
       <div className="flex gap-9 flex-wrap">
         {slicedData.map((value, index) => (
           <FoodPackage
