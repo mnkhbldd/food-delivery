@@ -19,7 +19,7 @@ export const createFood = async (req, res) => {
       })
       .end();
   } catch (error) {
-    console.error(error, err);
+    console.error(error, "err");
     return res
       .status(400)
       .send({
@@ -41,7 +41,7 @@ export const getFoods = async (req, res) => {
       })
       .end();
   } catch (error) {
-    console.error(error, err);
+    console.error(error, "err");
     return res
       .status(400)
       .send({
@@ -66,7 +66,7 @@ export const getFoodsByCategoryId = async (req, res) => {
       })
       .end();
   } catch (error) {
-    console.error(error, err);
+    console.error(error, "err");
     return res
       .status(400)
       .send({
@@ -89,7 +89,7 @@ export const getFoodById = async (req, res) => {
       })
       .end();
   } catch (error) {
-    console.error(error, err);
+    console.error(error, "err");
     return res
       .status(400)
       .send({

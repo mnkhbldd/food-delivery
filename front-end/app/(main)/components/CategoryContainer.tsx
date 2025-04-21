@@ -9,15 +9,23 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
 
 type foodCategoryDataType = {
   categoryName: string;
+  _id: string;
 };
 
 export const CategoryContainer = () => {
   const [foodCategoryData, setfoodCategoryData] = useState<
     foodCategoryDataType[]
   >([]);
+
+  const router = useRouter();
+
+  const handleClick = (categoryId: string) => {
+    router.push(`/foodsByCategory?categoryId=${categoryId}`);
+  };
 
   const fetchData = async () => {
     try {
@@ -42,7 +50,10 @@ export const CategoryContainer = () => {
               key={index}
               className="pl-4 md:basis-2/3 lg:basis-1/9"
             >
-              <Badge className="bg-white text-black rounded-full text-[18px] font-normal min-w-[151px]">
+              <Badge
+                className="bg-white text-black rounded-full text-[18px] font-normal min-w-[151px]"
+                onClick={() => handleClick(food._id)}
+              >
                 {food.categoryName}
               </Badge>
             </CarouselItem>
