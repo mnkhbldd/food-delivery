@@ -40,6 +40,7 @@ export const CategoryContainer = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
   return (
     <div className="w-full flex flex-col gap-9 pt-8">
       <p className="text-[30px] text-white font-semibold">Categories</p>
