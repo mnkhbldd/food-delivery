@@ -1,12 +1,23 @@
 import { v4 as uuidv4 } from "uuid";
 import UserModel from "../model/user.js";
+import bcrypt from "bcrypt";
 
 export const createUser = async (req, res) => {
   const { email, password, phoneNumber, address, isVerified } = req.body;
+  const hashedpassword = await bcrypt.hash(password, 10);
+  console.log(hashedpassword);
   try {
+    const oldUser = await UserModel.find({ email: email });
+    if (oldUser.length > 0) {
+      return res
+        .status(405)
+        .send({ success: false, message: "user already exist" })
+        .end();
+    }
+
     const user = await UserModel.create({
       email: email,
-      password: password,
+      password: hashedpassword,
       phoneNumber: phoneNumber,
       address: address,
       isVerified: isVerified,
@@ -19,7 +30,7 @@ export const createUser = async (req, res) => {
       })
       .end();
   } catch (error) {
-    console.error(error, err);
+    console.error(error, "err");
     return res
       .status(400)
       .send({
@@ -32,7 +43,7 @@ export const createUser = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await UserModel.find();
+    const users = await UserModel.find().select("-password");
     return res
       .status(200)
       .send({
@@ -64,7 +75,7 @@ export const getUserById = async (req, res) => {
       })
       .end();
   } catch (error) {
-    console.error(error, err);
+    console.error(error, "err");
     return res
       .status(400)
       .send({
