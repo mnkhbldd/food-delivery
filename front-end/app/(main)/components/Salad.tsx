@@ -7,6 +7,13 @@ type FoodType = {
   price: number;
   image: string;
   ingredients: string;
+  deliveryMockAddress: string;
+  isAdminPage: boolean;
+  _id: string;
+  category: {
+    _id: string;
+    categoryName: string;
+  };
 };
 export const SaladContainer = ({
   deliveryMockAddress,
@@ -38,12 +45,18 @@ export const SaladContainer = ({
       <div className="flex gap-9 flex-wrap">
         {slicedData.map((value, index) => (
           <FoodPackage
+            foodPackageId={value._id}
             deliveryMockAddress={deliveryMockAddress}
             key={index}
             foodName={value.foodName}
             price={value.price}
             image={value.image}
             ingredients={value.ingredients}
+            isAdminPage={false}
+            category={{
+              _id: value.category?._id || "",
+              categoryName: value.category?.categoryName || "Unknown",
+            }}
           />
         ))}
       </div>

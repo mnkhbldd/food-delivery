@@ -1,5 +1,5 @@
 "use client";
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, Home, Inbox, Link, Search, Settings } from "lucide-react";
 
 import {
   Sidebar,
@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 // Menu items.
 const items = [
@@ -64,21 +65,18 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="flex flex-col gap-6">
-              {items.map((item, index) => (
-                <SidebarMenuItem
-                  key={index}
-                  className={`${
-                    item.pageNumber == 1
-                  } ? "bg-black text-white" : "bg-white text-black" `}
-                >
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items.map((item, index) => {
+                return (
+                  <SidebarMenuItem key={index}>
+                    <SidebarMenuButton asChild>
+                      <a href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

@@ -12,9 +12,19 @@ type FoodType = {
   image: string;
   ingredients: string;
   deliveryMockAddress: string;
+  isAdminPage: boolean;
+  _id: string;
+  category: {
+    _id: string;
+    categoryName: string;
+  };
 };
 
-function foodsByCategoryPage() {
+function foodsByCategoryPage({
+  deliveryMockAddress,
+}: {
+  deliveryMockAddress: string;
+}) {
   const searchParams = useSearchParams();
   const categoryId = searchParams.get("categoryId");
   const [foodsByCategory, setFoodsByCategory] = useState<FoodType[]>([]);
@@ -66,12 +76,18 @@ function foodsByCategoryPage() {
       <div className="w-[90%] ">
         {foodsByCategory.map((value, index) => (
           <FoodPackage
-            key={index}
+            foodPackageId={value._id}
             deliveryMockAddress={deliveryMockAddress}
+            key={index}
             foodName={value.foodName}
             price={value.price}
             image={value.image}
             ingredients={value.ingredients}
+            isAdminPage={false}
+            category={{
+              _id: value.category?._id || "",
+              categoryName: value.category?.categoryName || "Unknown",
+            }}
           />
         ))}
       </div>

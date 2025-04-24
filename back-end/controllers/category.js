@@ -4,24 +4,33 @@ import categoryModel from "../model/category.js";
 
 export const createCategory = async (req, res) => {
   const { categoryName } = req.body;
-  try {
-    const category = await categoryModel.create({
-      categoryName: categoryName,
-    });
-    return res
-      .status(200)
-      .send({
-        success: true,
-        category: category,
-      })
-      .end();
-  } catch (error) {
-    console.error(error, err);
+  if (!categoryName) {
     return res
       .status(400)
       .send({
         success: false,
-        message: error,
+        message: "Category name is required",
+      })
+      .end();
+  }
+  try {
+    const category = await categoryModel.create({
+      categoryName,
+    });
+    return res
+      .status(201)
+      .send({
+        success: true,
+        category,
+      })
+      .end();
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error.message,
       })
       .end();
   }
@@ -34,81 +43,144 @@ export const getCategory = async (req, res) => {
       .status(200)
       .send({
         success: true,
-        categories: categories,
+        categories,
       })
       .end();
   } catch (error) {
-    console.error(error, err);
+    console.error(error);
     return res
       .status(400)
       .send({
         success: false,
-        message: error,
+        message: error.message,
       })
       .end();
   }
 };
 
 export const getCategoryById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const category = await categoryModel.findById(id);
-    return res
-      .status(200)
-      .send({
-        success: true,
-        category: category,
-      })
-      .end();
-  } catch (error) {
-    console.error(error, err);
+  const { id } = req.params;
+  if (!id) {
     return res
       .status(400)
       .send({
         success: false,
-        message: error,
+        message: "Category ID is required",
+      })
+      .end();
+  }
+  try {
+    const category = await categoryModel.findById(id);
+    if (!category) {
+      return res
+        .status(404)
+        .send({
+          success: false,
+          message: "Category not found",
+        })
+        .end();
+    }
+    return res
+      .status(200)
+      .send({
+        success: true,
+        category,
+      })
+      .end();
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error.message,
       })
       .end();
   }
 };
 
 export const deleteCategory = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const category = await categoryModel.findByIdAndDelete(id);
-    return res
-      .status(200)
-      .send({
-        success: true,
-        category: category,
-      })
-      .end();
-  } catch (error) {
+  const { id } = req.params;
+  if (!id) {
     return res
       .status(400)
       .send({
         success: false,
-        message: error,
+        message: "Category ID is required",
+      })
+      .end();
+  }
+  try {
+    const category = await categoryModel.findByIdAndDelete(id);
+    if (!category) {
+      return res
+        .status(404)
+        .send({
+          success: false,
+          message: "Category not found",
+        })
+        .end();
+    }
+    return res
+      .status(200)
+      .send({
+        success: true,
+        category,
+      })
+      .end();
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error.message,
       })
       .end();
   }
 };
 
 export const updateCategory = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const category = await categoryModel.findByIdAndUpdate(id, req.body);
-    return res.status(200).send({
-      success: true,
-      category: category,
-    });
-  } catch (error) {
+  const { id } = req.params;
+  if (!id) {
     return res
       .status(400)
       .send({
         success: false,
-        message: error,
+        message: "Category ID is required",
+      })
+      .end();
+  }
+  try {
+    const category = await categoryModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!category) {
+      return res
+        .status(404)
+        .send({
+          success: false,
+          message: "Category not found",
+        })
+        .end();
+    }
+    return res
+      .status(200)
+      .send({
+        success: true,
+        category,
+      })
+      .end();
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error.message,
       })
       .end();
   }
 };
+

@@ -1,23 +1,49 @@
 import UserModel from "../model/user.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const secret_key = process.env.SECRET_KEY;
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await UserModel.findOne({ email: email });
-    console.log(user);
-    const pass = await bcrypt.compare(password, user.password);
-    console.log(pass);
-    if (pass) {
-      return res.status(200).send({
-        success: true,
-        message: "success",
-      });
-    } else {
+
+    if (!user) {
       return res.status(404).send({
+        success: false,
+        message: "This account doesnt exists",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(401).send({
         success: false,
         message: "Email or password wrong",
       });
     }
-  } catch (error) {}
+
+    const token = jwt.sign(user.toJSON(), secret_key, { expiresIn: 3600 });
+    // const token = jwt.sign({...user}, secret_key, { expiresIn: 3600 }); second method
+
+    return res.status(200).send({
+      success: true,
+      message: "success",
+      token,
+    });
+  } catch (error) {
+    console.error(error, "err");
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error.message,
+      })
+      .end();
+  }
 };

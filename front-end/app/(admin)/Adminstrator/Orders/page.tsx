@@ -1,3 +1,4 @@
+"use client";                 
 import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ const OrdersPage: React.FC = () => {
 
   const fetchOrdersData = async () => {
     try {
-      const response = axios.get("http://localhost:8000/order/foodOrder");
+      const response = await axios.get("http://localhost:8000/order/foodOrder");
       setOrdersData(response.data.foodOrders);
     } catch (error) {
       console.error("cannot get orders data", error);

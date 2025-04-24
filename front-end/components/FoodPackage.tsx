@@ -11,8 +11,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { HandPlatter, Plus, X } from "lucide-react";
+import { HandPlatter, Pencil, Plus, Trash, X } from "lucide-react";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { useEffect, useRef, useState } from "react";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import axios from "axios";
+import { Textarea } from "./ui/textarea";
 
 type FoodType = {
   foodName: string;
@@ -20,50 +34,203 @@ type FoodType = {
   image: string;
   ingredients: string;
   deliveryMockAddress: string;
+  isAdminPage: boolean;
+  foodPackageId: string;
+  category: {
+    _id: string;
+    categoryName: string;
+  };
+};
+
+type FoodCategory = {
+  categoryName: string;
+  _id: string;
 };
 
 export const FoodPackage = ({
+  category,
   deliveryMockAddress,
+  foodPackageId,
+  isAdminPage,
   foodName,
   price,
   image,
   ingredients,
 }: FoodType) => {
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const [updatedFoodName, setUpdatedFoodName] = useState(foodName);
+  const [ingredientstext, setIngredientstext] = useState(ingredients);
+  const [updatedPrice, setUpdatedPrice] = useState(price);
+  const [updatedImage, setUpdatedImage] = useState(image);
+
+  const [foodCategoryNames, setFoodCategoryNames] = useState<FoodCategory[]>(
+    []
+  );
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    category._id
+  );
+
+  const fetchfoodCategoryNames = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/category");
+      setFoodCategoryNames(response.data.categories);
+    } catch (error) {
+      console.error("cannot fetch data", error);
+    }
+  };
+
+  const handleOnDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8000/food/${foodPackageId}`
+      );
+      console.log(response);
+    } catch (error) {
+      console.error("Failed to delete dish", error);
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const requestBody = {
+        foodName: updatedFoodName,
+        category: selectedCategory,
+        ingredients: ingredientstext,
+        price: updatedPrice,
+        image,
+      };
+      console.log("Request body:", requestBody);
+      const response = await axios.put(
+        `http://localhost:8000/food/${foodPackageId}`,
+        requestBody
+      );
+    } catch (error) {
+      console.error("Failed to update dish", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchfoodCategoryNames();
+  }, []);
+
   return (
     <div className="w-[397px] min-h-[342px] bg-white border rounded-[20px] p-[20px] h-fit">
-      <div
-        className="relative
-      "
-      >
+      <div className="relative">
         <Image
           height={210}
           width={365}
-          className="rounded-[12px] w-[365px] h-[210px] object-cover "
-          src={image}
+          className="rounded-[12px] w-[365px] h-[210px] object-cover"
+          src={image || "/default-image.jpg"}
           alt="Food package"
           unoptimized={true}
-        ></Image>
+        />
 
         <AlertDialog>
           <AlertDialogTrigger>
-            <div className="absolute w-[335px] h-[200px] top-1 left-3">
-              <div className="absolute bg-white rounded-full p-2 right-2 bottom-2">
-                <Plus className="text-[#EF4444] size-5" />
+            {isAdminPage ? (
+              <div className="absolute w-[335px] h-[200px] top-1 left-3">
+                <div className="absolute bg-white rounded-full p-2 right-2 bottom-2">
+                  <Pencil className="text-[#EF4444] size-5" />
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="absolute w-[335px] h-[200px] top-1 left-3">
+                <div className="absolute bg-white rounded-full p-2 right-2 bottom-2">
+                  <Plus className="text-[#EF4444] size-5" />
+                </div>
+              </div>
+            )}
           </AlertDialogTrigger>
-          {deliveryMockAddress.length > 0 ? (
+          {isAdminPage ? (
+            <AlertDialogContent>
+              <AlertDialogHeader className="flex flex-col gap-[24px]">
+                <AlertDialogTitle>Dishes info</AlertDialogTitle>
+                <AlertDialogDescription></AlertDialogDescription>
+                <div className="flex flex-col gap-[24px]">
+                  <div className="flex justify-between w-full">
+                    <p>Dish name</p>
+                    <textarea
+                      ref={inputRef}
+                      value={updatedFoodName}
+                      onChange={(e) => setUpdatedFoodName(e.target.value)}
+                      className="border w-[60%] rounded-[6px] p-1 h-[80px] resize-none overflow-y-auto text-wrap break-words"
+                    />
+                  </div>
+                  <div className="flex justify-between w-full">
+                    <p>Dish category</p>
+                    <Select
+                      onValueChange={setSelectedCategory}
+                      defaultValue={category._id}
+                    >
+                      <SelectTrigger className="w-[60%]">
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {foodCategoryNames.map((value, index) => (
+                            <SelectItem key={index} value={value._id}>
+                              {value.categoryName}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex justify-between w-full">
+                    <p>Ingredients</p>
+                    <textarea
+                      ref={inputRef}
+                      value={ingredientstext}
+                      onChange={(e) => setIngredientstext(e.target.value)}
+                      className="border w-[60%] rounded-[6px] p-1 h-[80px] resize-none overflow-y-auto text-wrap break-words"
+                    />
+                  </div>
+                  <div className="flex justify-between w-full h-fit">
+                    <p>Price</p>
+                    <input
+                      type="number"
+                      value={updatedPrice}
+                      onChange={(e) => setUpdatedPrice(Number(e.target.value))}
+                      className="border w-[60%] rounded-[6px] p-1"
+                    />
+                  </div>
+                  <div className="flex justify-between w-full h-fit">
+                    <p>Image</p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="border w-[60%] rounded-[6px] p-1"
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-between">
+                  <AlertDialogCancel
+                    className="w-fit border-red-400"
+                    onClick={handleOnDelete}
+                  >
+                    <Trash className="text-red-400" />
+                  </AlertDialogCancel>
+                  <AlertDialogAction onClick={handleUpdate} className="w-fit">
+                    Save changes
+                  </AlertDialogAction>
+                </div>
+              </AlertDialogHeader>
+            </AlertDialogContent>
+          ) : deliveryMockAddress.length > 0 ? (
             <AlertDialogContent className="w-fit h-fit !max-w-fit">
               <AlertDialogHeader>
+                <AlertDialogDescription></AlertDialogDescription>
                 <div className="flex gap-6">
                   <Image
-                    height={364}
                     width={367}
-                    className="rounded-[12px] w-[367px] h-[364px] object-cover "
+                    height={364}
+                    className="rounded-[12px] w-[367px] h-[364px] object-cover"
                     src={image}
                     alt="Food package"
+                    priority
                     unoptimized={true}
-                  ></Image>
+                  />
                   <div className="w-[377px] flex flex-col justify-between">
                     <div className="w-full flex flex-col">
                       <AlertDialogCancel className="rounded-full w-[36px] h-[36px] self-end">
@@ -84,7 +251,7 @@ export const FoodPackage = ({
                             ${`${price}`}
                           </p>
                         </div>
-                        <div className=" flex items-center gap-3">
+                        <div className="flex items-center gap-3">
                           <Button className="w-[44px] h-[44px] rounded-full bg-transparent text-black border border-black">
                             -
                           </Button>
@@ -101,7 +268,7 @@ export const FoodPackage = ({
                   </div>
                 </div>
               </AlertDialogHeader>
-              <AlertDialogFooter></AlertDialogFooter>
+              <AlertDialogFooter />
             </AlertDialogContent>
           ) : (
             <AlertDialogContent>
