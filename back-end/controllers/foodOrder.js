@@ -29,9 +29,9 @@ export const createFoodOrder = async (req, res) => {
 
 export const getFoodOrders = async (req, res) => {
   try {
-    const foodOrders = await FoodOrdersModel.find()
-      .populate("user")
-      .populate("foodOrderItems.food");
+    const foodOrders = await FoodOrdersModel.find().populate("user").populate({
+      path: "foodOrderItems.food",
+    });
     return res
       .status(200)
       .send({

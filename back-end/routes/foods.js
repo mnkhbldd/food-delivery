@@ -8,6 +8,7 @@ import {
   getFoodsByCategoryId,
   updateFood,
 } from "../controllers/foods.js";
+import { verifyToken } from "../middleware/auth.js";
 
 export const foodsRouter = expresse.Router();
 

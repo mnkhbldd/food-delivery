@@ -63,10 +63,16 @@ export const FoodPackage = ({
   const [ingredientstext, setIngredientstext] = useState(ingredients);
   const [updatedPrice, setUpdatedPrice] = useState(price);
   const [updatedImage, setUpdatedImage] = useState(image);
+  (context) => (
+    <Context>
+      <ui></ui>
+    </Context>
+  );
 
   const [foodCategoryNames, setFoodCategoryNames] = useState<FoodCategory[]>(
     []
   );
+
   const [selectedCategory, setSelectedCategory] = useState<string>(
     category._id
   );

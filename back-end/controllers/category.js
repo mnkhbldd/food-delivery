@@ -183,4 +183,3 @@ export const updateCategory = async (req, res) => {
       .end();
   }
 };
-

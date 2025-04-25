@@ -14,6 +14,18 @@ import {
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
+// [{
+//   food
+//   category: {
+
+//   }
+// }]
+
+// =>
+// {
+//   categoryname
+//   foods
+// }
 // Menu items.
 const items = [
   {
