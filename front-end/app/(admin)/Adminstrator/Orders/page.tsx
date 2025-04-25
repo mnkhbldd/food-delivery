@@ -1,5 +1,5 @@
-"use client";                 
-import React, { useState } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
@@ -11,25 +11,37 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import axios from "axios";
+import { FoodOrderList } from "./components/foodOrderList";
+
+type OrdersData = {
+  user: {
+    email: string;
+    number: number;
+
+    address: string;
+  };
+  createdAt: string;
+  totalPrice: string;
+};
 
 const OrdersPage: React.FC = () => {
-  const testText = `2024/12/СБД, 12-р хороо, СБД нэгдсэн эмнэлэг Sbd negdsen emneleg |
-            100 айлын гүүрэн гарцны хойд талд 4д ногоонСБД, 12-р хороо, СБД
-            нэгдсэн эмнэлэг Sbd negdsen emneleg | 100 айлын гүүрэн гарцны хойд
-            талд 4д ногоон20`;
-
-  const [ordersData, setOrdersData] = useState([]);
+  const [ordersData, setOrdersData] = useState<OrdersData[]>([]);
 
   const fetchOrdersData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/order/foodOrder");
+      const response = await axios.get("http://localhost:8000/foodOrder");
       setOrdersData(response.data.foodOrders);
+
+      console.log(ordersData);
     } catch (error) {
       console.error("cannot get orders data", error);
     }
   };
 
-  const slicedText = testText.slice(0, 53);
+  useEffect(() => {
+    fetchOrdersData();
+  }, []);
+
   return (
     <div className="w-full h-full flex justify-center bg-[#F4F4F5]">
       <div className="w-[90%] flex flex-col gap-6">
@@ -70,36 +82,19 @@ const OrdersPage: React.FC = () => {
           <p className="w-[300px] px-4 flex ">Address</p>
           <p className="w-[180px]">Delivery state</p>
         </div>
-        <div className="flex items-center justify-around border">
-          <div className="p-4">
-            <input type="checkbox"></input>
-          </div>
-          <p className="p-4">1</p>
-          <p className="p-4">test@gmail.com</p>
-          <Select>
-            <SelectTrigger className="w-[180px] rounded-full px-2 border-none shadow-none">
-              <SelectValue placeholder="2 Foods " />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">PENDING</SelectItem>
-              <SelectItem value="dark">DELIVERED</SelectItem>
-              <SelectItem value="system">CANCELLED</SelectItem>
-            </SelectContent>
-          </Select>
-          <p className="w-[150px] p-4">2024/12/30</p>
-          <p className="p-4 w-[160px]">$26.97</p>
-          <p className="w-[300px] px-4 flex h-[42px]">{slicedText + "..."}</p>
-          <Select>
-            <SelectTrigger className="w-[180px] rounded-full px-2">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">PENDING</SelectItem>
-              <SelectItem value="dark">DELIVERED</SelectItem>
-              <SelectItem value="system">CANCELLED</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        {ordersData.map((value, index) => {
+          return (
+            <div key={index}>
+              <FoodOrderList
+                email={value.user.email}
+                number={index}
+                totalPrice={value.totalPrice}
+                address={value.user.address}
+                createdAt={value.createdAt}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
