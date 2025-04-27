@@ -22,6 +22,7 @@ type OrdersData = {
   };
   createdAt: string;
   totalPrice: string;
+  foodOrderItems: any[];
 };
 
 const OrdersPage: React.FC = () => {
@@ -86,6 +87,7 @@ const OrdersPage: React.FC = () => {
           return (
             <div key={index}>
               <FoodOrderList
+                foods={value.foodOrderItems}
                 email={value.user.email}
                 number={index}
                 totalPrice={value.totalPrice}

@@ -63,11 +63,19 @@ export const FoodPackage = ({
   const [ingredientstext, setIngredientstext] = useState(ingredients);
   const [updatedPrice, setUpdatedPrice] = useState(price);
   const [updatedImage, setUpdatedImage] = useState(image);
-  (context) => (
-    <Context>
-      <ui></ui>
-    </Context>
-  );
+  const [quantity, setQuantity] = useState(1);
+
+  const handleIncreaseQuantity = () => {
+    if (quantity > 0) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
   const [foodCategoryNames, setFoodCategoryNames] = useState<FoodCategory[]>(
     []
@@ -258,11 +266,19 @@ export const FoodPackage = ({
                           </p>
                         </div>
                         <div className="flex items-center gap-3">
-                          <Button className="w-[44px] h-[44px] rounded-full bg-transparent text-black border border-black">
+                          <Button
+                            onClick={handleDecreaseQuantity}
+                            className="w-[44px] h-[44px] rounded-full bg-transparent text-black border border-black"
+                          >
                             -
                           </Button>
-                          <p className="text-[18px] font-semibold">1</p>
-                          <Button className="w-[44px] h-[44px] rounded-full bg-transparent text-black border border-black">
+                          <p className="text-[18px] font-semibold">
+                            {quantity}
+                          </p>
+                          <Button
+                            onClick={handleIncreaseQuantity}
+                            className="w-[44px] h-[44px] rounded-full bg-transparent text-black border border-black"
+                          >
                             +
                           </Button>
                         </div>

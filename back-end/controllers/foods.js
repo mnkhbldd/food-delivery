@@ -52,6 +52,8 @@ export const getFoods = async (req, res) => {
   }
 };
 
+
+
 export const getFoodsByCategoryId = async (req, res) => {
   const { categoryId } = req.params;
   try {

@@ -2,6 +2,7 @@
 import { ChevronRight, MapPin, ShoppingCart, User, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,8 +14,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Textarea } from "./ui/textarea";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { MyCartPackage } from "./myCartPackage";
 
 export const MainPageHeader = ({
   deliveryMockAddress,
@@ -94,9 +104,29 @@ export const MainPageHeader = ({
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-        <Button className="bg-white rounded-full w-[36px] h-[36px]">
-          <ShoppingCart className="text-[#18181B]" />
-        </Button>
+
+        <Sheet>
+          <SheetTrigger>
+            {" "}
+            <Button className="bg-white rounded-full w-[36px] h-[36px]">
+              <ShoppingCart className="text-[#18181B]" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent className="!w-[635px] pt-20 bg-[#404040] flex flex-col gap-6">
+            <SheetHeader className="flex flex-col gap-6">
+              <SheetTitle className="flex gap-2">
+                {" "}
+                <ShoppingCart className="text-white" />
+                <p className="text-white">Order details</p>
+              </SheetTitle>
+              <SheetDescription className="flex w-full justify-between  gap-2 bg-white p-1 rounded-full">
+                <Button className="px-17 rounded-full w-1/2">Cart</Button>
+                <Button className="px-17 rounded-full w-1/2">Order</Button>
+              </SheetDescription>
+              <MyCartPackage />
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
         <Avatar className="w-[36px] h-[36px]">
           <AvatarImage src="" alt="@avatar" />
           <AvatarFallback className="bg-[#EF4444]">

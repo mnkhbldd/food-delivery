@@ -15,20 +15,41 @@ type InputTypes = {
 };
 
 export const LoginSectionEmail = ({
-  onClick,
+  onNextStep,
   handlePreviousStep,
   handleAlreadyHaveAccount,
-  inputRef,
 }: {
-  onClick: () => void;
+  onNextStep: (email: string) => void;
   handlePreviousStep: () => void;
   handleAlreadyHaveAccount: () => void;
-  inputRef: React.RefObject<HTMLInputElement | null>;
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [emailError, setEmailError] = useState("");
+  const validateEmail = (email: string) => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const handleNext = () => {
+    const email = inputRef.current?.value?.trim();
+
+    if (!email || !validateEmail(email)) {
+      setEmailError("Email is required and must be valid");
+      return;
+    }
+
+    setEmailError("");
+    onNextStep(email);
+  };
+
   return (
     <div className="flex items-center justify-around w-full h-full">
       <div className="flex flex-col gap-6 w-[288px]">
-        <Button className="bg-white border text-black px-4 py-2 w-[36px]">
+        <Button
+          className="bg-white border text-black px-4 py-2 w-[36px]"
+          onClick={handlePreviousStep}
+        >
           <ArrowLeft />
         </Button>
         <div>
@@ -37,13 +58,19 @@ export const LoginSectionEmail = ({
             Sign up to explore your favorite dishes.
           </p>
         </div>
-
-        <Input
-          ref={inputRef}
-          name="gmail"
-          placeholder="Enter your email address"
-        />
-        <Button onClick={onClick} className="bg-gray-400">
+        <div className="flex flex-col gap-1">
+          <Input
+            ref={inputRef}
+            name="email"
+            placeholder="Enter your email address"
+            type="email"
+            className={emailError ? "border-red-500" : ""}
+          />
+          {emailError && (
+            <span className="text-red-500 text-sm">{emailError}</span>
+          )}
+        </div>
+        <Button onClick={handleNext} className="bg-gray-400">
           Let's Go
         </Button>
         <p className="text-center text-[#71717A]">
@@ -61,14 +88,61 @@ export const LoginSectionEmail = ({
 };
 
 export const LoginSectionPassword = ({
+  email,
   handlePreviousStep,
   handleAlreadyHaveAccount,
-  inputRef,
 }: {
+  email: string;
   handlePreviousStep: () => void;
   handleAlreadyHaveAccount: () => void;
-  inputRef: React.RefObject<HTMLInputElement | null>;
 }) => {
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const [error, setError] = useState({
+    password: false,
+    confirmPassword: false,
+  });
+  const [passwordError, setPasswordError] = useState("");
+
+  const handleSignup = async () => {
+    const password = passwordRef.current?.value;
+    const confirmPassword = confirmPasswordRef.current?.value;
+
+    const isPasswordEmpty = !password;
+    const isConfirmPasswordEmpty = !confirmPassword;
+    const doPasswordsMatch = password === confirmPassword;
+
+    setError({
+      password: isPasswordEmpty,
+      confirmPassword: isConfirmPasswordEmpty || !doPasswordsMatch,
+    });
+
+    if (isPasswordEmpty || isConfirmPasswordEmpty || !doPasswordsMatch) {
+      if (!doPasswordsMatch && password && confirmPassword) {
+        setPasswordError("Passwords do not match");
+      } else {
+        setPasswordError("Password and Confirm Password are required");
+      }
+      return;
+    }
+
+    try {
+      await axios.post("http://localhost:8000/user", {
+        email,
+        password,
+      });
+      router.push("/");
+    } catch (err: any) {
+      console.error(err);
+      if (err.response?.status === 405) {
+        setPasswordError("Email already exists.");
+      } else {
+        setPasswordError("Failed to create account. Please try again.");
+      }
+    }
+  };
+
   return (
     <div className="flex items-center justify-around w-full h-full">
       <div className="flex flex-col gap-6 w-[288px]">
@@ -81,33 +155,38 @@ export const LoginSectionPassword = ({
         <div>
           <p className="text-[24px] font-semibold">Create a strong password</p>
           <p className="text-[16px] text-[#71717A]">
-            Create a strong password with letters, numbers.
+            Create a strong password with letters and numbers.
           </p>
         </div>
-        <Input
-          ref={inputRef}
-          name="password"
-          placeholder="Password"
-          type="password"
-        />
-        <Input
-          ref={inputRef}
-          name="confirmpassword"
-          placeholder="Confirm"
-          type="password"
-        />
-        <div className="flex gap-2 items-center">
-          <Checkbox id="terms2" disabled className="border-[#71717A]" />
-          <label htmlFor="terms2" className="text-[#71717A]">
-            Show password
-          </label>
+        <div className="flex flex-col gap-1">
+          <Input
+            ref={passwordRef}
+            name="password"
+            placeholder="Password"
+            type="password"
+            className={error.password ? "border-red-500" : ""}
+          />
         </div>
-        <Button className="bg-gray-400">Let's Go</Button>
+        <div className="flex flex-col gap-1">
+          <Input
+            ref={confirmPasswordRef}
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            type="password"
+            className={error.confirmPassword ? "border-red-500" : ""}
+          />
+        </div>
+        {passwordError && (
+          <span className="text-red-500 text-sm">{passwordError}</span>
+        )}
+        <Button onClick={handleSignup} className="bg-gray-400">
+          Let's Go
+        </Button>
         <p className="text-center text-[#71717A]">
           Already have an account?{" "}
           <span
-            className="text-[#2563EB] cursor-pointer"
             onClick={handleAlreadyHaveAccount}
+            className="text-[#2563EB] cursor-pointer"
           >
             Log in
           </span>
