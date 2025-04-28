@@ -25,17 +25,30 @@ import {
 import { Textarea } from "./ui/textarea";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MyCartPackage } from "./myCartPackage";
+import { useRouter } from "next/navigation";
+import MyOrderPackage from "./myOrderPackage";
 
 export const MainPageHeader = ({
   deliveryMockAddress,
   changeDeliveryLocation,
-
   deliveryInputRef,
 }: {
   deliveryMockAddress: string;
   changeDeliveryLocation: () => void;
   deliveryInputRef: any;
 }) => {
+  const router = useRouter();
+  const handleToLogin = () => {
+    router.push("/login");
+  };
+
+  const [isSelected, setIsSelected] = useState(0);
+
+  const handleIsSelected = (id: number) => {
+    setIsSelected(id);
+  };
+
+  const duplicatedPage = [<MyCartPackage />, <MyOrderPackage />][isSelected];
   return (
     <div className="bg-[#18181B] h-[68px] w-full flex items-center justify-between px-[88px] py-3 fixed z-9999 ">
       <div className="flex gap-3 items-center">
@@ -107,27 +120,51 @@ export const MainPageHeader = ({
 
         <Sheet>
           <SheetTrigger>
-            {" "}
-            <Button className="bg-white rounded-full w-[36px] h-[36px]">
+            <div
+              role="button"
+              tabIndex={0}
+              className="bg-white rounded-full w-[36px] h-[36px] flex items-center justify-center"
+            >
               <ShoppingCart className="text-[#18181B]" />
-            </Button>
+            </div>
           </SheetTrigger>
-          <SheetContent className="!w-[635px] pt-20 bg-[#404040] flex flex-col gap-6">
+          <SheetContent
+            style={{ maxWidth: "535px" }}
+            className="!w-[645px] pt-20 bg-[#404040] flex flex-col gap-6"
+          >
             <SheetHeader className="flex flex-col gap-6">
               <SheetTitle className="flex gap-2">
-                {" "}
                 <ShoppingCart className="text-white" />
                 <p className="text-white">Order details</p>
               </SheetTitle>
-              <SheetDescription className="flex w-full justify-between  gap-2 bg-white p-1 rounded-full">
-                <Button className="px-17 rounded-full w-1/2">Cart</Button>
-                <Button className="px-17 rounded-full w-1/2">Order</Button>
+              <SheetDescription className="flex w-full justify-between bg-white p-1 rounded-full">
+                <Button
+                  onClick={() => handleIsSelected(0)}
+                  className={`px-17 rounded-full w-[227px]  ${
+                    isSelected == 0
+                      ? "bg-[#EF4444] text-white"
+                      : "bg-white text-black"
+                  } `}
+                >
+                  Cart
+                </Button>
+                <Button
+                  onClick={() => handleIsSelected(1)}
+                  className={`px-17 rounded-full w-[227px]  ${
+                    isSelected == 1
+                      ? "bg-[#EF4444] text-white"
+                      : "bg-white text-black"
+                  } `}
+                >
+                  Order
+                </Button>
               </SheetDescription>
-              <MyCartPackage />
+              {duplicatedPage}
             </SheetHeader>
           </SheetContent>
         </Sheet>
-        <Avatar className="w-[36px] h-[36px]">
+
+        <Avatar className="w-[36px] h-[36px]" onClick={handleToLogin}>
           <AvatarImage src="" alt="@avatar" />
           <AvatarFallback className="bg-[#EF4444]">
             <User className="text-white" />

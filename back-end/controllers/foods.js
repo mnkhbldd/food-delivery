@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import FoodModel from "../model/food.js";
+import categoryModel from "../model/category.js";
 
 export const createFood = async (req, res) => {
   const { foodName, price, image, ingredients, category } = req.body;
@@ -51,8 +52,6 @@ export const getFoods = async (req, res) => {
       .end();
   }
 };
-
-
 
 export const getFoodsByCategoryId = async (req, res) => {
   const { categoryId } = req.params;
@@ -142,3 +141,39 @@ export const updateFood = async (req, res) => {
       .end();
   }
 };
+
+// export const getFoodsByCategoryId = async (req, res) => {
+//   const { categoryId } = req.params;
+//   try {
+//     const foods = await categoryModel.aggregate([
+//       {
+//         $lookup: {
+//           from: "foods",
+//           localField: "_id",
+//           foreignField: "category",
+//           as: "foods",
+//         },
+//         $project: {
+//           categoryName: 1,
+//           foods: 1,
+//         },
+//       },
+//     ]);
+//     return res
+//       .status(200)
+//       .send({
+//         success: true,
+//         foods: foods,
+//       })
+//       .end();
+//   } catch (error) {
+//     console.error(error, "err");
+//     return res
+//       .status(400)
+//       .send({
+//         success: false,
+//         message: error,
+//       })
+//       .end();
+//   }
+// };

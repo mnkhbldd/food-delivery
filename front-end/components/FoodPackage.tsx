@@ -124,6 +124,10 @@ export const FoodPackage = ({
     }
   };
 
+  // const handleSaveFoodsInCart = () => {
+  //   localStorage.setItem()
+  // }
+
   useEffect(() => {
     fetchfoodCategoryNames();
   }, []);
