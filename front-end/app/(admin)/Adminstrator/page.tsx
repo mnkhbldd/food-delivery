@@ -110,7 +110,10 @@ const AdministratorPage = () => {
               );
             })}
             <Button className="rounded-full w-[40px] h-[40px] bg-[#EF4444]">
-              <Plus />
+              <div>
+                {" "}
+                <Plus />
+              </div>
             </Button>
           </div>
         </div>

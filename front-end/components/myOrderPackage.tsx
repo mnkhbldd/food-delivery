@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Clock3, LineChart, Soup, X } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
@@ -33,7 +33,6 @@ type FoodType = {
 };
 
 export const MyOrderPackage = () => {
-  const [myCartfoods, setMyCartFoods] = useState<FoodType[]>([]);
   return (
     <div>
       {" "}

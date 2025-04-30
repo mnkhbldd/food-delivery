@@ -50,7 +50,10 @@ export const LoginSectionEmail = ({
           className="bg-white border text-black px-4 py-2 w-[36px]"
           onClick={handlePreviousStep}
         >
-          <ArrowLeft />
+          <div>
+            {" "}
+            <ArrowLeft />
+          </div>
         </Button>
         <div>
           <p className="text-[24px] font-semibold">Create your account</p>
@@ -232,7 +235,6 @@ export const LoginSectionLogin = () => {
 
       localStorage.setItem("token", response.data.token);
       router.push("/");
-      console.log(response);
     } catch (err: any) {
       if (err.response?.status === 401) {
         setLoginError("Email or password is not correct");

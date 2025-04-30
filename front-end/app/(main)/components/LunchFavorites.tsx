@@ -45,6 +45,7 @@ export const LunchFavoritesContainer = ({
       <div className="flex gap-9 flex-wrap">
         {slicedData.map((value, index) => (
           <FoodPackage
+            value={value}
             foodPackageId={value._id}
             deliveryMockAddress={deliveryMockAddress}
             key={index}

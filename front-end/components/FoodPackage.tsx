@@ -79,13 +79,12 @@ export const FoodPackage = ({
     }
   };
 
-  const handleSaveFoodsInCart = (value: any) => {
-    const storedFoods = window.localStorage.getItem("foods");
-    const card = storedFoods ? JSON.parse(storedFoods) : null;
-
-    card
-      ? window.localStorage.setItem("foods", JSON.stringify([...card, value]))
-      : window.localStorage.setItem("foods", JSON.stringify([value]));
+  const handleSaveFoodsInCart = (food: any) => {
+    const card = JSON.parse(window.localStorage.getItem("foods")!);
+    const newCard = card
+      ? [...card, { ...food, quantity }]
+      : [{ ...food, quantity }];
+    window.localStorage.setItem("foods", JSON.stringify(newCard));
   };
 
   const [foodCategoryNames, setFoodCategoryNames] = useState<FoodCategory[]>(
@@ -281,7 +280,7 @@ export const FoodPackage = ({
                             onClick={handleDecreaseQuantity}
                             className="w-[44px] h-[44px] rounded-full bg-transparent text-black border border-black"
                           >
-                            -
+                            <div>-</div>
                           </Button>
                           <p className="text-[18px] font-semibold">
                             {quantity}
@@ -290,7 +289,7 @@ export const FoodPackage = ({
                             onClick={handleIncreaseQuantity}
                             className="w-[44px] h-[44px] rounded-full bg-transparent text-black border border-black"
                           >
-                            +
+                            <div>+</div>
                           </Button>
                         </div>
                       </div>

@@ -120,7 +120,10 @@ export const AppetizersContainerAdmin = ({
       <div className="flex gap-9 flex-wrap">
         <div className="w-[397px] h-[352px] rounded-[20px] p-[20px]  bg-white border border-dashed border-[#EF4444]">
           <AlertDialog>
-            <AlertDialogTrigger className="flex items-center justify-center w-full h-full">
+            <AlertDialogTrigger
+              asChild
+              className="flex items-center justify-center w-full h-full"
+            >
               <div className="flex flex-col justify-center items-center">
                 {" "}
                 <div className="w-fit bg-[#EF4444] rounded-full p-2 ">
@@ -205,6 +208,7 @@ export const AppetizersContainerAdmin = ({
         </div>
         {appetizerData.map((value, index) => (
           <FoodPackage
+            value={value}
             foodPackageId={value._id}
             deliveryMockAddress={deliveryMockAddress}
             key={index}

@@ -27,7 +27,6 @@ export const AppetizersContainer = ({
         "http://localhost:8000/food/6800b55bd95efcaef95fc881"
       );
       setAppetizerData(response.data.foods);
-      console.log(appetizerData, "appetizerData");
     } catch (error) {
       console.error("cannot fetch data", error);
     }

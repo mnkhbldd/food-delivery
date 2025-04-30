@@ -21,6 +21,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from "@/components/ui/sheet";
 import { Textarea } from "./ui/textarea";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -34,6 +35,21 @@ interface DecodedToken {
   address: string;
 }
 
+type FoodType = {
+  foodName: string;
+  price: number;
+  image: string;
+  ingredients: string;
+  deliveryMockAddress: string;
+  isAdminPage: boolean;
+  foodPackageId: string;
+  category: {
+    _id: string;
+    categoryName: string;
+  };
+  quantity: number;
+};
+
 export const MainPageHeader = ({
   deliveryInputRef,
 }: {
@@ -45,15 +61,7 @@ export const MainPageHeader = ({
   };
   const [userId, setUserId] = useState<string | null>(null);
   const [deliveryAddress, setDeliveryAddress] = useState<string | null>(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken: DecodedToken = jwtDecode(token);
-      setUserId(decodedToken._id);
-      setDeliveryAddress(decodedToken.address);
-    }
-  }, []);
+  const [myCartfoods, setMyCartFoods] = useState<FoodType[]>([]);
 
   const fetchAddress = () => {
     const token = localStorage.getItem("token");
@@ -61,18 +69,22 @@ export const MainPageHeader = ({
       const requestAddress = {
         address: deliveryInputRef.current?.value,
       };
-      console.log(requestAddress, "address");
+
       axios.put(`http://localhost:8000/user`, requestAddress, {
         headers: {
           authorization: token,
         },
       });
-      console.log("working");
-      console.log(userId);
     } catch (error) {
       console.error("no token", error);
-      console.log("Didnt sign up ");
     }
+  };
+
+  const fetchFoods = () => {
+    const storedFoods = window.localStorage.getItem("foods");
+    const card = storedFoods ? JSON.parse(storedFoods) : [];
+    setMyCartFoods(card);
+    console.log("myCartfoods", myCartfoods);
   };
 
   const [isSelected, setIsSelected] = useState(0);
@@ -80,6 +92,15 @@ export const MainPageHeader = ({
   const handleIsSelected = (id: number) => {
     setIsSelected(id);
   };
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken: DecodedToken = jwtDecode(token);
+      setUserId(decodedToken._id);
+      setDeliveryAddress(decodedToken.address);
+    }
+    fetchFoods();
+  }, [myCartfoods.length]);
 
   const duplicatedPage = [<MyCartPackage />, <MyOrderPackage />][isSelected];
   return (
@@ -153,18 +174,21 @@ export const MainPageHeader = ({
         </AlertDialog>
 
         <Sheet>
-          <SheetTrigger>
-            <div
-              role="button"
+          <SheetTrigger asChild>
+            <Button
               tabIndex={0}
               className="bg-white rounded-full w-[36px] h-[36px] flex items-center justify-center"
             >
-              <ShoppingCart className="text-[#18181B]" />
-            </div>
+              {myCartfoods.length > 0 ? (
+                <p className="text-red-700 text-bold">{myCartfoods.length}</p>
+              ) : (
+                <ShoppingCart className="text-[#18181B]" />
+              )}
+            </Button>
           </SheetTrigger>
           <SheetContent
             style={{ maxWidth: "535px" }}
-            className="!w-[645px] pt-20 bg-[#404040] flex flex-col gap-6"
+            className="!w-[645px] pt-20 bg-[#404040] flex flex-col gap-6 overflow-y-scroll"
           >
             <SheetHeader className="flex flex-col gap-6">
               <SheetTitle className="flex gap-2">
@@ -180,7 +204,7 @@ export const MainPageHeader = ({
                       : "bg-white text-black"
                   } `}
                 >
-                  Cart
+                  <div>Cart</div>
                 </Button>
                 <Button
                   onClick={() => handleIsSelected(1)}
@@ -190,7 +214,7 @@ export const MainPageHeader = ({
                       : "bg-white text-black"
                   } `}
                 >
-                  Order
+                  <div>Order</div>
                 </Button>
               </SheetDescription>
               {duplicatedPage}

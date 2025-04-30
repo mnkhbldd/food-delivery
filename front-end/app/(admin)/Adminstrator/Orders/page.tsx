@@ -32,8 +32,6 @@ const OrdersPage: React.FC = () => {
     try {
       const response = await axios.get("http://localhost:8000/foodOrder");
       setOrdersData(response.data.foodOrders);
-
-      console.log(ordersData);
     } catch (error) {
       console.error("cannot get orders data", error);
     }
@@ -67,7 +65,7 @@ const OrdersPage: React.FC = () => {
             </div>
 
             <Button className="px-4 py-2 rounded-full">
-              Change delivery state
+              <div>Change delivery state</div>
             </Button>
           </div>
         </div>

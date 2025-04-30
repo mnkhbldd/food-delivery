@@ -35,7 +35,7 @@ export const CategoryContainer = () => {
       console.error("cannot fetch data", error);
     }
   };
-  console.log(foodCategoryData);
+
 
   useEffect(() => {
     fetchData();

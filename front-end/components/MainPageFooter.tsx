@@ -22,7 +22,6 @@ export const MainPageFooter = () => {
       console.error("cannot fetch data", error);
     }
   };
-  console.log(foodCategoryData);
 
   useEffect(() => {
     fetchData();
