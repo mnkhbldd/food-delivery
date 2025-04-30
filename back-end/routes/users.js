@@ -6,6 +6,7 @@ import {
   getUsers,
   updateUser,
 } from "../controllers/users.js";
+import { verifyToken } from "../middleware/auth.js";
 
 export const usersRouter = expresse.Router();
 
@@ -14,4 +15,4 @@ usersRouter
   .get("/", getUsers)
   .get("/:id", getUserById)
   .delete("/:id", deleteUser)
-  .put("/:id", updateUser);
+  .put("/", verifyToken, updateUser);

@@ -27,19 +27,52 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MyCartPackage } from "./myCartPackage";
 import { useRouter } from "next/navigation";
 import MyOrderPackage from "./myOrderPackage";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+interface DecodedToken {
+  _id: string;
+  address: string;
+}
 
 export const MainPageHeader = ({
-  deliveryMockAddress,
-  changeDeliveryLocation,
   deliveryInputRef,
 }: {
-  deliveryMockAddress: string;
-  changeDeliveryLocation: () => void;
   deliveryInputRef: any;
 }) => {
   const router = useRouter();
   const handleToLogin = () => {
     router.push("/login");
+  };
+  const [userId, setUserId] = useState<string | null>(null);
+  const [deliveryAddress, setDeliveryAddress] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken: DecodedToken = jwtDecode(token);
+      setUserId(decodedToken._id);
+      setDeliveryAddress(decodedToken.address);
+    }
+  }, []);
+
+  const fetchAddress = () => {
+    const token = localStorage.getItem("token");
+    try {
+      const requestAddress = {
+        address: deliveryInputRef.current?.value,
+      };
+      console.log(requestAddress, "address");
+      axios.put(`http://localhost:8000/user`, requestAddress, {
+        headers: {
+          authorization: token,
+        },
+      });
+      console.log("working");
+      console.log(userId);
+    } catch (error) {
+      console.error("no token", error);
+      console.log("Didnt sign up ");
+    }
   };
 
   const [isSelected, setIsSelected] = useState(0);
@@ -78,8 +111,8 @@ export const MainPageHeader = ({
           <AlertDialogTrigger>
             <div className="flex items-center gap-3 bg-white rounded-full px-3 py-2">
               <MapPin className="text-[#EF4444]" />
-              {deliveryMockAddress ? (
-                <p className="text-[#EF4444]">{deliveryMockAddress}</p>
+              {deliveryAddress ? (
+                <p className="text-[#EF4444]">{deliveryAddress}</p>
               ) : (
                 <p className="text-[#EF4444]">
                   Delivery address:{" "}
@@ -101,6 +134,7 @@ export const MainPageHeader = ({
                 </AlertDialogCancel>
               </div>
               <Textarea
+                onChange={(e) => setDeliveryAddress(e.target.value)}
                 ref={deliveryInputRef}
                 className="h-[112px]"
                 placeholder="Please provide specific address details such as building number, entrance, and apartment number"
@@ -110,7 +144,7 @@ export const MainPageHeader = ({
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 className="bg-[#18181B]"
-                onClick={changeDeliveryLocation}
+                onClick={fetchAddress}
               >
                 Deliver Here
               </AlertDialogAction>

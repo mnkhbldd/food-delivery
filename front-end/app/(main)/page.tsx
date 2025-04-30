@@ -11,29 +11,33 @@ import { AppetizersContainer } from "./components/AppetizersContainer";
 import { SaladContainer } from "./components/Salad";
 import { LunchFavoritesContainer } from "./components/LunchFavorites";
 import MainPageFooter from "@/components/MainPageFooter";
+import { jwtDecode } from "jwt-decode";
 type FoodType = {
   foodName: string;
   price: number;
   image: string;
   ingredients: string;
 };
+interface DecodedToken {
+  address: string;
+}
 export default function Home() {
   const deliveryInputRef = useRef<HTMLTextAreaElement | null>(null);
-  const [deliveryMockAddress, setDelvieryMockAddress] = useState("");
 
-  const changeDeliveryLocation = () => {
-    if (deliveryInputRef.current) {
-      setDelvieryMockAddress(deliveryInputRef.current.value);
+  const [deliveryAddress, setDeliveryAddress] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken: DecodedToken = jwtDecode(token);
+
+      setDeliveryAddress(decodedToken.address);
     }
-  };
+  }, []);
 
   return (
     <div className="w-full h-screen bg-[#404040]">
-      <MainPageHeader
-        deliveryInputRef={deliveryInputRef}
-        deliveryMockAddress={deliveryMockAddress}
-        changeDeliveryLocation={changeDeliveryLocation}
-      />
+      <MainPageHeader deliveryInputRef={deliveryInputRef} />
       {/* ///////////////// */}
       <div className="w-full h-full">
         <Image
@@ -47,10 +51,12 @@ export default function Home() {
       <div className="bg-[#404040] w-full flex flex-col items-center">
         <div className="w-[90%] flex flex-col gap-[54px]">
           <CategoryContainer />
-          <AppetizersContainer deliveryMockAddress={deliveryMockAddress} />
-          <SaladContainer deliveryMockAddress={deliveryMockAddress} />
-          <LunchFavoritesContainer deliveryMockAddress={deliveryMockAddress} />
-          <SaladContainer deliveryMockAddress={deliveryMockAddress} />
+          <AppetizersContainer deliveryMockAddress={deliveryAddress || ""} />
+          <SaladContainer deliveryMockAddress={deliveryAddress || ""} />
+          <LunchFavoritesContainer
+            deliveryMockAddress={deliveryAddress || ""}
+          />
+          <SaladContainer deliveryMockAddress={deliveryAddress || ""} />
         </div>
       </div>
       <MainPageFooter />

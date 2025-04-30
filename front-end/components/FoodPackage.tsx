@@ -40,6 +40,7 @@ type FoodType = {
     _id: string;
     categoryName: string;
   };
+  value: any;
 };
 
 type FoodCategory = {
@@ -49,6 +50,7 @@ type FoodCategory = {
 
 export const FoodPackage = ({
   category,
+  value,
   deliveryMockAddress,
   foodPackageId,
   isAdminPage,
@@ -75,6 +77,15 @@ export const FoodPackage = ({
     if (quantity > 1) {
       setQuantity(quantity - 1);
     }
+  };
+
+  const handleSaveFoodsInCart = (value: any) => {
+    const storedFoods = window.localStorage.getItem("foods");
+    const card = storedFoods ? JSON.parse(storedFoods) : null;
+
+    card
+      ? window.localStorage.setItem("foods", JSON.stringify([...card, value]))
+      : window.localStorage.setItem("foods", JSON.stringify([value]));
   };
 
   const [foodCategoryNames, setFoodCategoryNames] = useState<FoodCategory[]>(
@@ -123,10 +134,6 @@ export const FoodPackage = ({
       console.error("Failed to update dish", error);
     }
   };
-
-  // const handleSaveFoodsInCart = () => {
-  //   localStorage.setItem()
-  // }
 
   useEffect(() => {
     fetchfoodCategoryNames();
@@ -287,7 +294,10 @@ export const FoodPackage = ({
                           </Button>
                         </div>
                       </div>
-                      <AlertDialogAction className="rounded-full bg-[#18181B] h-[44px]">
+                      <AlertDialogAction
+                        onClick={() => handleSaveFoodsInCart(value)}
+                        className="rounded-full bg-[#18181B] h-[44px]"
+                      >
                         Add to cart
                       </AlertDialogAction>
                     </div>

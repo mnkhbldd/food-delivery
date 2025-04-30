@@ -14,9 +14,9 @@ export const verifyToken = (req, res, next) => {
 
   jwt.verify(token, secret_key, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "Token invalid or expired" });
     }
-    req.user = decoded;
+    req.body = { ...req.body, userData: decoded };
     next();
   });
 };
