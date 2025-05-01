@@ -53,30 +53,30 @@ export const getFoods = async (req, res) => {
   }
 };
 
-export const getFoodsByCategoryId = async (req, res) => {
-  const { categoryId } = req.params;
-  try {
-    const foods = await FoodModel.find({ category: categoryId }).populate(
-      "category"
-    );
-    return res
-      .status(200)
-      .send({
-        success: true,
-        foods: foods,
-      })
-      .end();
-  } catch (error) {
-    console.error(error, "err");
-    return res
-      .status(400)
-      .send({
-        success: false,
-        message: error,
-      })
-      .end();
-  }
-};
+// export const getFoodsByCategoryId = async (req, res) => {
+//   const { categoryId } = req.params;
+//   try {
+//     const foods = await FoodModel.find({ category: categoryId }).populate(
+//       "category"
+//     );
+//     return res
+//       .status(200)
+//       .send({
+//         success: true,
+//         foods: foods,
+//       })
+//       .end();
+//   } catch (error) {
+//     console.error(error, "err");
+//     return res
+//       .status(400)
+//       .send({
+//         success: false,
+//         message: error,
+//       })
+//       .end();
+//   }
+// };
 
 export const getFoodById = async (req, res) => {
   try {
@@ -142,38 +142,39 @@ export const updateFood = async (req, res) => {
   }
 };
 
-// export const getFoodsByCategoryId = async (req, res) => {
-//   const { categoryId } = req.params;
-//   try {
-//     const foods = await categoryModel.aggregate([
-//       {
-//         $lookup: {
-//           from: "foods",
-//           localField: "_id",
-//           foreignField: "category",
-//           as: "foods",
-//         },
-//         $project: {
-//           categoryName: 1,
-//           foods: 1,
-//         },
-//       },
-//     ]);
-//     return res
-//       .status(200)
-//       .send({
-//         success: true,
-//         foods: foods,
-//       })
-//       .end();
-//   } catch (error) {
-//     console.error(error, "err");
-//     return res
-//       .status(400)
-//       .send({
-//         success: false,
-//         message: error,
-//       })
-//       .end();
-//   }
-// };
+export const getFoodsByCategoryId = async (req, res) => {
+  try {
+    const foods = await categoryModel.aggregate([
+      {
+        $lookup: {
+          from: "foods",
+          localField: "_id",
+          foreignField: "category",
+          as: "foods",
+        },
+      },
+      {
+        $project: {
+          categoryName: 1,
+          foods: 1,
+        },
+      },
+    ]);
+    return res
+      .status(200)
+      .send({
+        success: true,
+        foods: foods,
+      })
+      .end();
+  } catch (error) {
+    console.error(error, "err");
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error,
+      })
+      .end();
+  }
+};

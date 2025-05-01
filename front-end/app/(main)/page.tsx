@@ -52,11 +52,6 @@ export default function Home() {
         <div className="w-[90%] flex flex-col gap-[54px]">
           <CategoryContainer />
           <AppetizersContainer deliveryMockAddress={deliveryAddress || ""} />
-          <SaladContainer deliveryMockAddress={deliveryAddress || ""} />
-          <LunchFavoritesContainer
-            deliveryMockAddress={deliveryAddress || ""}
-          />
-          <SaladContainer deliveryMockAddress={deliveryAddress || ""} />
         </div>
       </div>
       <MainPageFooter />

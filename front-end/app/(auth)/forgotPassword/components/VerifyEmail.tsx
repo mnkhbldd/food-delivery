@@ -7,9 +7,11 @@ import { useRouter } from "next/navigation";
 export const VerifyEmail = ({
   handleNextPage,
   handlePreviousPage,
+  emailInputRef,
 }: {
   handleNextPage: () => void;
   handlePreviousPage: () => void;
+  emailInputRef: React.RefObject<HTMLInputElement | null>;
 }) => {
   const router = useRouter();
   return (
@@ -24,12 +26,14 @@ export const VerifyEmail = ({
         <div>
           <p className="text-[24px] font-semibold">Please verify your email</p>
           <p className="text-[16px] text-[#71717A]">
-            We just sent an email to Test@gmail.com Click the link in the email
-            to verify your account.
+            We just sent an email to {emailInputRef.current?.value} Click the
+            link in the email to verify your account.
           </p>
         </div>
         <div className="flex flex-col gap-1">
           <Input
+            ref={emailInputRef}
+            defaultValue={emailInputRef.current?.value}
             name="email"
             placeholder="Enter your email address"
             type="email"

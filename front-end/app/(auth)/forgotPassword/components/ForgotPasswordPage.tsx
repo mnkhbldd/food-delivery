@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CreateNewPassword } from "./CreateNewPassword";
 import { ResetPassword } from "./ResetPassword";
 import { VerifyEmail } from "./VerifyEmail";
@@ -18,12 +18,16 @@ export const ForgotPasswordPage = () => {
     setPage(page - 1);
   };
 
+  const emailInputRef = useRef<HTMLInputElement>(null);
+
   const ForgotPassWordArray = [
     <ResetPassword
       handleNextPage={handleNextPage}
       handlePreviousPage={handlePreviousPage}
+      emailInputRef={emailInputRef}
     />,
     <VerifyEmail
+      emailInputRef={emailInputRef}
       handleNextPage={handleNextPage}
       handlePreviousPage={handlePreviousPage}
     />,

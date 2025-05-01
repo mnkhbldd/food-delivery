@@ -287,7 +287,9 @@ export const LoginSectionLogin = () => {
           <span className="text-red-500 text-sm text-center">{loginError}</span>
         )}
 
-        <a className="underline">Forgot password ?</a>
+        <a href="/forgotPassword" className="underline">
+          Forgot password ?
+        </a>
 
         <Button onClick={() => router.push("/login")} className="bg-gray-400">
           Let's Go

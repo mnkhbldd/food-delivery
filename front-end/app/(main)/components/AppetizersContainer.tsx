@@ -9,10 +9,8 @@ type FoodType = {
   ingredients: string;
   foodPackageId: string;
   _id: string;
-  category: {
-    _id: string;
-    categoryName: string;
-  };
+  categoryName: string;
+  foods: any[];
 };
 export const AppetizersContainer = ({
   deliveryMockAddress,
@@ -23,16 +21,13 @@ export const AppetizersContainer = ({
 
   const fetchAppetizerData = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8000/food/6800b55bd95efcaef95fc881"
-      );
+      const response = await axios.get("http://localhost:8000/food");
       setAppetizerData(response.data.foods);
+      console.log(response.data.foods);
     } catch (error) {
       console.error("cannot fetch data", error);
     }
   };
-
-  const slicedData = appetizerData.slice(0, 6);
 
   useEffect(() => {
     fetchAppetizerData();
@@ -40,26 +35,31 @@ export const AppetizersContainer = ({
 
   return (
     <div className="flex flex-col gap-[54px]">
-      <p className="text-[30px] text-white font-semibold">Appetizers</p>
-      <div className="flex gap-9 flex-wrap">
-        {slicedData.map((value, index) => (
-          <FoodPackage
-            value={value}
-            foodPackageId={value._id}
-            deliveryMockAddress={deliveryMockAddress}
-            key={index}
-            foodName={value.foodName}
-            price={value.price}
-            image={value.image}
-            ingredients={value.ingredients}
-            isAdminPage={false}
-            category={{
-              _id: value.category?._id || "",
-              categoryName: value.category?.categoryName || "Unknown",
-            }}
-          />
-        ))}
-      </div>
+      {appetizerData.map((value, index) => {
+        return (
+          <div key={index} className="flex flex-col gap-[54px]">
+            <p className="text-[30px] text-white font-semibold">
+              {value.categoryName}
+            </p>
+            <div className="flex gap-9 flex-wrap">
+              {value.foods.map((value, index) => (
+                <FoodPackage
+                  key={index}
+                  foodName={value.foodName}
+                  price={value.price}
+                  image={value.image}
+                  ingredients={value.ingredients}
+                  foodPackageId={value._id}
+                  deliveryMockAddress={deliveryMockAddress}
+                  isAdminPage={false}
+                  category={value.category}
+                  value={value}
+                />
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };

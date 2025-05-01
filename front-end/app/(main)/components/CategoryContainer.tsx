@@ -23,10 +23,6 @@ export const CategoryContainer = () => {
 
   const router = useRouter();
 
-  const handleClick = (categoryId: string) => {
-    router.push(`/foodsByCategory?categoryId=${categoryId}`);
-  };
-
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:8000/category");
@@ -36,7 +32,6 @@ export const CategoryContainer = () => {
     }
   };
 
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -45,16 +40,13 @@ export const CategoryContainer = () => {
     <div className="w-full flex flex-col gap-9 pt-8">
       <p className="text-[30px] text-white font-semibold">Categories</p>
       <Carousel className="w-full ">
-        <CarouselContent className="">
+        <CarouselContent className="flex">
           {foodCategoryData.map((food, index) => (
             <CarouselItem
               key={index}
-              className="pl-4 md:basis-2/3 lg:basis-1/9"
+              className="basis-1/3 md:basis-1/4 lg:basis-1/6 xl:basis-1/9 flex justify-center cursor-pointer"
             >
-              <Badge
-                className="bg-white text-black rounded-full text-[18px] font-normal min-w-[151px]"
-                onClick={() => handleClick(food._id)}
-              >
+              <Badge className="bg-white text-black rounded-full text-[18px] font-normal min-w-[151px] text-center">
                 {food.categoryName}
               </Badge>
             </CarouselItem>
