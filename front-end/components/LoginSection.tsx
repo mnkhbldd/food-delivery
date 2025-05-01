@@ -182,7 +182,7 @@ export const LoginSectionPassword = ({
         {passwordError && (
           <span className="text-red-500 text-sm">{passwordError}</span>
         )}
-        <Button onClick={handleSignup} className="bg-gray-400">
+        <Button onClick={() => router.push("/login")} className="bg-gray-400">
           Let's Go
         </Button>
         <p className="text-center text-[#71717A]">
@@ -289,7 +289,7 @@ export const LoginSectionLogin = () => {
 
         <a className="underline">Forgot password ?</a>
 
-        <Button onClick={handleOnLogin} className="bg-gray-400">
+        <Button onClick={() => router.push("/login")} className="bg-gray-400">
           Let's Go
         </Button>
 

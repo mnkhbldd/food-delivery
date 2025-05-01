@@ -11,11 +11,9 @@ const userSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: String,
-    required: true,
   },
   address: {
     type: String,
-    required: true,
   },
   role: {
     type: String,
