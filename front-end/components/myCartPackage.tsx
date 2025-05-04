@@ -35,6 +35,8 @@ type FoodType = {
     categoryName: string;
   };
   quantity: number;
+  _id: string;
+  categoryName: string;
 };
 
 interface DecodedToken {
@@ -69,8 +71,12 @@ export const MyCartPackage = () => {
       await axios.post("http://localhost:8000/foodOrder", {
         user: userId,
         totalPrice,
-        foods: myCartfoods,
+        foodOrderItems: myCartfoods.map((item) => ({
+          food: item._id,
+          quantity: item.quantity,
+        })),
       });
+
       console.log("Checkout successful");
       console.log(myCartfoods, "myCartfoods");
       localStorage.removeItem("foods");

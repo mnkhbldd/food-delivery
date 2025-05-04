@@ -6,6 +6,7 @@ import {
   deleteFoodOrder,
   getFoodOrderById,
   getFoodOrders,
+  getFoodOrdersByUserId,
   updateFoodOrder,
 } from "../controllers/foodOrder.js";
 
@@ -16,4 +17,5 @@ foodOrdersRouter
   .get("/", getFoodOrders)
   .get("/:id", getFoodOrderById)
   .delete("/:id", deleteFoodOrder)
+  .get("/foodList/:id", getFoodOrdersByUserId)
   .put("/:id", updateFoodOrder);

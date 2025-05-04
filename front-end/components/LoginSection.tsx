@@ -291,7 +291,7 @@ export const LoginSectionLogin = () => {
           Forgot password ?
         </a>
 
-        <Button onClick={() => router.push("/login")} className="bg-gray-400">
+        <Button onClick={handleOnLogin} className="bg-gray-400">
           Let's Go
         </Button>
 

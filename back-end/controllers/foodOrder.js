@@ -29,9 +29,9 @@ export const createFoodOrder = async (req, res) => {
 
 export const getFoodOrders = async (req, res) => {
   try {
-    const foodOrders = await FoodOrdersModel.find().populate("user").populate({
-      path: "foodOrderItems.food",
-    });
+    const foodOrders = await FoodOrdersModel.find()
+      .populate("user")
+      .populate("foodOrderItems.food");
     return res
       .status(200)
       .send({
@@ -106,6 +106,31 @@ export const updateFoodOrder = async (req, res) => {
       .send({
         success: true,
         foodOrder: foodOrder,
+      })
+      .end();
+  } catch (error) {
+    console.error(error, "err");
+    return res
+      .status(400)
+      .send({
+        success: false,
+        message: error,
+      })
+      .end();
+  }
+};
+
+export const getFoodOrdersByUserId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const foodOrders = await FoodOrdersModel.find({ user: id }).populate(
+      "user"
+    );
+    return res
+      .status(200)
+      .send({
+        success: true,
+        foodOrders: foodOrders,
       })
       .end();
   } catch (error) {
