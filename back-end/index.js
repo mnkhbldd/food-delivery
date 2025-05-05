@@ -8,7 +8,7 @@ import { foodOrdersRouter } from "./routes/foodOrder.js";
 import { authRouter } from "./routes/auth.js";
 
 const app = express();
-const port = 8000;
+const port = process.env.PORT;
 
 connectMongoDB();
 
