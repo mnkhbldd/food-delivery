@@ -35,7 +35,9 @@ const AdministratorPage = () => {
 
   const fetchCategoryNameData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/category");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/category`
+      );
       setCategoryNameData(response.data.categories);
     } catch (error) {
       console.error("cannot fetch data", error);
@@ -44,7 +46,9 @@ const AdministratorPage = () => {
 
   const fetchFoods = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/food");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/food`
+      );
       setFoods(response.data.foods);
     } catch (error) {
       console.error("cannot fetch data", error);

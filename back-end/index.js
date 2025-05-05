@@ -6,8 +6,12 @@ import { foodsRouter } from "./routes/foods.js";
 import { categoriesRouter } from "./routes/category.js";
 import { foodOrdersRouter } from "./routes/foodOrder.js";
 import { authRouter } from "./routes/auth.js";
+import { configDotenv } from "dotenv";
 
 const app = express();
+
+configDotenv();
+
 const port = process.env.PORT;
 
 connectMongoDB();

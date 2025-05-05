@@ -70,11 +70,15 @@ export const MainPageHeader = ({
         address: deliveryInputRef.current?.value,
       };
 
-      axios.put(`http://localhost:8000/user`, requestAddress, {
-        headers: {
-          authorization: token,
-        },
-      });
+      axios.put(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/user`,
+        requestAddress,
+        {
+          headers: {
+            authorization: token,
+          },
+        }
+      );
     } catch (error) {
       console.error("no token", error);
     }

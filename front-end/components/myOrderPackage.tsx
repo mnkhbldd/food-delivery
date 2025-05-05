@@ -70,7 +70,7 @@ export const MyOrderPackage = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:8000/foodOrder/foodList/${userId}`
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/foodOrder/foodList/${userId}`
       );
 
       setFoodOrder(response.data.foodOrders);

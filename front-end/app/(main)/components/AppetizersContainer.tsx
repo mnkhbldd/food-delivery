@@ -21,7 +21,9 @@ export const AppetizersContainer = ({
 
   const fetchAppetizerData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/food");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/food`
+      );
       setAppetizerData(response.data.foods);
       console.log(response.data.foods);
     } catch (error) {

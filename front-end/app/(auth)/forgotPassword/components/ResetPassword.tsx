@@ -34,7 +34,9 @@ export const ResetPassword = ({
     }
 
     try {
-      const response = await axios.get("http://localhost:8000/user");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/user`
+      );
 
       console.log(response.data);
 

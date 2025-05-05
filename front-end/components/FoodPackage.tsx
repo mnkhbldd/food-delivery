@@ -97,7 +97,9 @@ export const FoodPackage = ({
 
   const fetchfoodCategoryNames = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/category");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/category`
+      );
       setFoodCategoryNames(response.data.categories);
     } catch (error) {
       console.error("cannot fetch data", error);
@@ -107,7 +109,7 @@ export const FoodPackage = ({
   const handleOnDelete = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:8000/food/${foodPackageId}`
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/food/${foodPackageId}`
       );
       console.log(response);
     } catch (error) {
@@ -126,7 +128,7 @@ export const FoodPackage = ({
       };
       console.log("Request body:", requestBody);
       const response = await axios.put(
-        `http://localhost:8000/food/${foodPackageId}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/food/${foodPackageId}`,
         requestBody
       );
     } catch (error) {

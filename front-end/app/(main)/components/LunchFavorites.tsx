@@ -25,7 +25,7 @@ export const LunchFavoritesContainer = ({
   const fetchLunchFavoritesData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/food/6800b579d95efcaef95fc887"
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/food/6800b579d95efcaef95fc887`
       );
       setlunchFavorites(response.data.foods);
     } catch (error) {

@@ -68,14 +68,17 @@ export const MyCartPackage = () => {
   const handleCheckout = async () => {
     if (!userId || !myCartfoods.length) return;
     try {
-      await axios.post("http://localhost:8000/foodOrder", {
-        user: userId,
-        totalPrice,
-        foodOrderItems: myCartfoods.map((item) => ({
-          food: item._id,
-          quantity: item.quantity,
-        })),
-      });
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/foodOrder`,
+        {
+          user: userId,
+          totalPrice,
+          foodOrderItems: myCartfoods.map((item) => ({
+            food: item._id,
+            quantity: item.quantity,
+          })),
+        }
+      );
 
       console.log("Checkout successful");
       console.log(myCartfoods, "myCartfoods");

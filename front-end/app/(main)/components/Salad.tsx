@@ -25,7 +25,7 @@ export const SaladContainer = ({
   const fetchSaladData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/food/6800b561d95efcaef95fc883"
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/food/6800b561d95efcaef95fc883`
       );
       setSaladData(response.data.foods);
     } catch (error) {

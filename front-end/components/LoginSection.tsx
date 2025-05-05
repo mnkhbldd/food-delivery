@@ -131,7 +131,7 @@ export const LoginSectionPassword = ({
     }
 
     try {
-      await axios.post("http://localhost:8000/user", {
+      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/user`, {
         email,
         password,
       });
@@ -228,10 +228,13 @@ export const LoginSectionLogin = () => {
     if (isEmailEmpty || isPasswordEmpty) return;
 
     try {
-      const response = await axios.post("http://localhost:8000/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/login`,
+        {
+          email,
+          password,
+        }
+      );
 
       localStorage.setItem("token", response.data.token);
       router.push("/");

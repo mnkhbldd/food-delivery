@@ -30,7 +30,9 @@ const OrdersPage: React.FC = () => {
 
   const fetchOrdersData = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/foodOrder");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/foodOrder`
+      );
       setOrdersData(response.data.foodOrders);
     } catch (error) {
       console.error("cannot get orders data", error);

@@ -59,8 +59,8 @@ export const AppetizersContainerAdmin = ({
     try {
       const url =
         selectedCategory === "all"
-          ? "http://localhost:8000/food"
-          : `http://localhost:8000/food/${selectedCategory}`;
+          ? `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/food`
+          : `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/food/${selectedCategory}`;
       const response = await axios.get(url);
       const data = response.data.foods || response.data.food;
       setAppetizerData(data);
@@ -70,7 +70,9 @@ export const AppetizersContainerAdmin = ({
   };
   const fetchfoodCategoryNames = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/category");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/category`
+      );
       setFoodCategoryNames(response.data.categories);
     } catch (error) {
       console.error("cannot fetch data", error);
@@ -93,7 +95,7 @@ export const AppetizersContainerAdmin = ({
     };
     try {
       const response = await axios.post(
-        `http://localhost:8000/food`,
+        `${process.env.NEXT_PUBLIC_BACKEND_ENDPOINT}/food`,
         requestBody
       );
     } catch (error) {
